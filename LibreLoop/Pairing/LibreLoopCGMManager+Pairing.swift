@@ -435,7 +435,7 @@ extension LibreLoopCGMManager {
             return
         }
 
-        let loopCondition: GlucoseCondition?
+        let loopCondition: LoopKit.GlucoseCondition?
         switch sample.condition {
         case .belowRange?: loopCondition = .belowRange
         case .aboveRange?: loopCondition = .aboveRange
@@ -444,11 +444,11 @@ extension LibreLoopCGMManager {
 
         let newSample = NewGlucoseSample(
             date: sample.date,
-            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: sample.valueMgDL),
+            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: sample.valueMgDL),
             condition: loopCondition,
             trend: Self.mapTrend(sample.trend),
             trendRate: sample.rateOfChangeMgDLPerMinute.map {
-                LoopQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0)
+                HKQuantity(unit: .milligramsPerDeciliterPerMinute, doubleValue: $0)
             },
             isDisplayOnly: isDisplayOnly,
             wasUserEntered: false,
@@ -514,7 +514,7 @@ extension LibreLoopCGMManager {
             let date = activatedAt.addingTimeInterval(TimeInterval(sample.lifeCount) * 60)
             newSamples.append(NewGlucoseSample(
                 date: date,
-                quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(mgdl)),
+                quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(mgdl)),
                 condition: nil,
                 trend: nil,
                 trendRate: nil,
@@ -610,7 +610,7 @@ extension LibreLoopCGMManager {
         let date = activatedAt.addingTimeInterval(TimeInterval(lifeCount) * 60)
         let sample = NewGlucoseSample(
             date: date,
-            quantity: LoopQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(mgdl)),
+            quantity: HKQuantity(unit: .milligramsPerDeciliter, doubleValue: Double(mgdl)),
             condition: nil,
             trend: nil,
             trendRate: nil,

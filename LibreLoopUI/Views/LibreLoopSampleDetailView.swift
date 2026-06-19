@@ -33,7 +33,7 @@ struct LibreLoopSampleDetailView: View {
                 }
             }
 
-            Section("Forwarding to Loop") {
+            Section("Forwarding to \(hostAppName)") {
                 LabeledContent("Sent") {
                     HStack(spacing: 6) {
                         Image(systemName: sentIcon)

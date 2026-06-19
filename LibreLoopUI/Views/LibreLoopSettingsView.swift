@@ -346,7 +346,7 @@ struct LibreLoopSettingsView: View {
     /// designed against 5-min CGM input. Turning it on requires the user
     /// to read the warning sheet.
     private var forwardingSection: some View {
-        Section("Forwarding to Loop") {
+        Section("Forwarding to \(hostAppName)") {
             Toggle("Send every reading (experimental)", isOn: Binding(
                 get: { viewModel.minuteByMinuteForwardingEnabled },
                 set: { newValue in
