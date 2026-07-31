@@ -164,6 +164,18 @@ public final class LibreLoopSensorMonitor: @unchecked Sendable {
             llog("monitor starting; refreshing post-auth notifications")
             self.emitStatus("Refreshing notifications")
             let refreshOK = await self.refreshPostAuthNotifications()
+            // If this monitor was stopped while the (not cancellation-aware)
+            // CCCD refresh was still awaiting its acks, it has been superseded
+            // by a newer connection. Bail before touching the link: otherwise
+            // this stale monitor's close path would cancelConnection the *new*
+            // attempt's peripheral (same identifier) and fire the disconnect
+            // handler, derailing the live reconnect (field log 2026-07-25
+            // 15:53: a refresh started at :37, monitor stopped at :47, refresh
+            // failed at :53 and dropped the fresh attempt mid-connect).
+            if Task.isCancelled {
+                llog("monitor superseded during CCCD refresh; not touching the link")
+                return
+            }
             // If CCCD refresh failed because the BLE link died between
             // handshake-complete and our first CCCD write, the session is
             // already dead. session.notifications() on a dead session
@@ -173,7 +185,17 @@ public final class LibreLoopSensorMonitor: @unchecked Sendable {
             // failure that wasn't propagated). Fire disconnect immediately
             // so the CGMManager re-enters the reconnect loop.
             if !refreshOK {
-                llog("CCCD refresh failed; treating session as disconnected and not consuming notifications")
+                llog("CCCD refresh failed; closing the link so the reconnect is a fresh connect + full re-subscribe")
+                // We never finished setup (post-auth CCCD arm), so don't sit on the
+                // still-open link -- close it. Reusing a half-set-up connection
+                // re-arms cached, un-acked CCCD state and relivelocks
+                // (connect→adopt→arm-fail, repeat); a fresh connect forces a full
+                // re-discover + re-arm -- the "clears only on a fresh characteristic
+                // discovery" the livelock note describes, without an app restart.
+                // Critically, a half-set-up link can stay connected while the
+                // regular-data channels (glucose/patchStatus) never armed, so iOS
+                // gets no notification to wake us on: closing avoids that dead state.
+                self.scanner.cancelConnection(self.session.peripheral)
                 self.lock.lock()
                 let handler = self.disconnectHandler
                 self.lock.unlock()
