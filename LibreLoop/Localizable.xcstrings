@@ -17,6 +17,9 @@
       "comment" : "Reconnect-failed status after many attempts",
       "extractionState" : "manual"
     },
+    "Check sensor" : {
+      "comment" : "Sensor check alert title"
+    },
     "Connecting" : {
       "comment" : "Pairing stage: connecting",
       "extractionState" : "manual"
@@ -28,6 +31,9 @@
     "Initializing" : {
       "comment" : "Sensor lifecycle: initializing",
       "extractionState" : "manual"
+    },
+    "Loop is having trouble communicating with your FreeStyle Libre 3 sensor. CGM readings may pause briefly and should resume automatically. No action is needed unless this keeps happening." : {
+      "comment" : "Sensor check alert body (transient transmission error)"
     },
     "mg/dL" : {
       "comment" : "Short unit string for mg/dL"
@@ -91,6 +97,12 @@
       "comment" : "Sensor lifecycle: warming up",
       "extractionState" : "manual"
     },
+    "Your FreeStyle Libre 3 sensor ends %@. When you replace it, the new sensor warms up for about an hour before readings resume — a short CGM gap is normal." : {
+      "comment" : "24h sensor-expiry alert body (expiry date/time)"
+    },
+    "Your FreeStyle Libre 3 sensor ends at %@. Have a new sensor ready — it warms up for about an hour before readings resume, so expect a short CGM gap." : {
+      "comment" : "2h sensor-expiry alert body (expiry time)"
+    },
     "Your FreeStyle Libre 3 sensor expires %@. Replace it before then to avoid a CGM interruption." : {
       "comment" : "24h sensor-expiry alert body (expiry date/time)",
       "extractionState" : "manual"
@@ -98,6 +110,9 @@
     "Your FreeStyle Libre 3 sensor expires at %@. Replace it now to avoid a CGM interruption." : {
       "comment" : "2h sensor-expiry alert body (expiry time)",
       "extractionState" : "manual"
+    },
+    "Your FreeStyle Libre 3 sensor has ended. Apply a new sensor to resume CGM — it warms up for about an hour before the first reading." : {
+      "comment" : "Sensor expired alert body"
     },
     "Your FreeStyle Libre 3 sensor has expired. Replace it to resume CGM readings." : {
       "comment" : "Sensor expired alert body",

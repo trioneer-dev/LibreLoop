@@ -319,6 +319,9 @@
       "comment" : "Pair new sensor button",
       "extractionState" : "manual"
     },
+    "Pair New Sensor" : {
+      "comment" : "Prominent action to pair a new sensor when the current one needs replacement"
+    },
     "Pairing" : {
       "comment" : "Pairing progress screen title",
       "extractionState" : "manual"
