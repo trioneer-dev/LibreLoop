@@ -545,16 +545,15 @@ extension LibreLoopCGMManager {
 
         let isDisplayOnly = !sample.isActionable
 
-        if !state.experimentalMinuteByMinuteForwarding,
-           let last = state.latestForwardedToLoopAt,
+        // TEMP: opt-out ignored — 1-min forwarding disabled pending per-CGM rework in Trio.
+        if let last = state.latestForwardedToLoopAt,
            sample.date.timeIntervalSince(last) < 270 {
             // Default-mode throttle, applied to actionable AND display-only
             // samples alike: Loop's algorithm is paced around the 5-minute CGM
             // cadence other plugins emit, and per-minute updates — even
             // display-only chart points — pull the cadence away from what Loop
             // was tuned for. 4.5 min gives a 30-second slop under 5 min so the
-            // natural cadence isn't blocked by jitter. Opt-out is
-            // experimentalMinuteByMinuteForwarding.
+            // natural cadence isn't blocked by jitter.
             let age = Int(sample.date.timeIntervalSince(last))
             let tag = isDisplayOnly ? " display-only" : ""
             llog("throttled:\(tag) \(Int(sample.valueMgDL)) mg/dL lifeCount=\(sample.lifeCount) (only \(age)s since last forward; experimental minute-by-minute mode is off)")

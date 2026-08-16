@@ -37,7 +37,8 @@ struct LibreLoopSettingsView: View {
             lastReadingSection
             recentReadingsSection
             debugInfoSection
-            forwardingSection
+            // TEMP: hidden pending per-CGM rework; gate forced in ingest(_:).
+            // forwardingSection
             developerSection
             activitySection
             deleteSection
